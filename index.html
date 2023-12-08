@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab6 Polishchuk D IS-13</title>
+</head>
+
+<body>
+    <button id="getDataButton">Отримати дані</button>
+    <div id="userInfo"></div>
+
+    <script>
+        document.getElementById('getDataButton').addEventListener('click', () => {
+
+            fetch('https://randomuser.me/api')
+                .then(response => response.json())
+                .then(data => {
+                    const selectedData = {
+                        picture: data.results[0].picture.large,
+                        country: data.results[0].location.country,
+                        postcode: data.results[0].location.postcode,
+                        phone: data.results[0].phone,
+                        name: `${data.results[0].name.first} ${data.results[0].name.last}`
+                    };
+
+                    displayUserInfo(selectedData);
+                })
+                .catch(error => console.error('Помилка отримання даних:', error));
+        });
+
+        function displayUserInfo(data) {
+            const userInfoContainer = document.getElementById('userInfo');
+            userInfoContainer.innerHTML = `
+                <h2>Інформація про користувача</h2>
+                <p><strong>Ім'я:</strong> ${data.name}</p>
+                <p><strong>Країна:</strong> ${data.country}</p>
+                <p><strong>Поштовий індекс:</strong> ${data.postcode}</p>
+                <p><strong>Телефон:</strong> ${data.phone}</p>
+                <img src="${data.picture}" alt="Картинка користувача">
+            `;
+        }
+    </script>
+</body>
+
+</html>
